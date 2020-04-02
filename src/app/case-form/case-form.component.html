@@ -1,0 +1,59 @@
+<pre>{{ case | json}}</pre>
+<form [formGroup]="form" class="color-form" (ngSubmit)="onSubmit()">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="repoName">Repo Name</label> 
+      <input type="text" id="repoName" placeholder="" formControlName="repoName" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="jobNumber">Job Number</label> 
+      <input type="text" id="jobNumber" placeholder="" formControlName="jobNumber" class="form-control">
+    </div>
+  </div>
+  
+  <div class="form-row">
+    <label for="description">Description</label>
+    <textarea id="description" formControlName="description" cols="30" rows="10" class="form-control"></textarea>
+  </div>
+  <div class="form-group">
+    <input type="checkbox" id="includeException" formControlName="includeException" class="filled-in chk-col-info">
+    <label for="includeException">异常错误</label> 
+  </div>
+  <div class="form-group">
+    <input type="checkbox" id="includeAssertion" formControlName="includeAssertion" class="filled-in chk-col-info">
+    <label for="includeAssertion">断言错误</label> 
+  </div>
+
+  <div class="form-row">
+    <label for="causeUrl">Cause URL</label>
+    <input type="text" id="causeUrl" formControlName="causeUrl" class="form-control">
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="preCommit">Pre Commit SHA</label> 
+      <input type="text" id="preCommit" placeholder="" formControlName="preCommit" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="currentCommit">Current Commit SHA</label> 
+      <input type="text" id="currentCommit" placeholder="" formControlName="currentCommit" class="form-control">
+    </div>
+  </div>
+
+  <div formArrayName="fixUrls">
+    <label class="col-form-label">Fix URL</label>
+    <div class="form-group" *ngFor="let fixUrl of fixUrls.controls; let i=index">
+      <input class="form-control" [formControlName]="i">
+      <button class="btn btn-link" (click)="deleteFixUrl(i)">删除</button>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button class="btn btn-link" (click)="addFixUrl()">增加</button>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-link bg-white text-info shadow px-5">Submit</button>
+  </div>
+
+</form>

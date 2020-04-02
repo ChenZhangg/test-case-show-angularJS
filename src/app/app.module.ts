@@ -3,16 +3,41 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { CaseItemComponent } from './case-item/case-item.component';
+import { CaseListComponent } from './case-list/case-list.component';
+
+// import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { HttpClientModule } from '@angular/common/http'
+import { APP_BASE_HREF } from '@angular/common';
+import { CaseShowComponent } from './case-show/case-show.component';
+import { CaseFormComponent } from './case-form/case-form.component'; 
+import { CaseService } from './case.service'
+import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { CaseNewComponent } from './case-new/case-new.component';
+import { CaseEditComponent } from './case-edit/case-edit.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CaseItemComponent,
+    CaseListComponent,
+    CaseShowComponent,
+    CaseFormComponent,
+    CaseNewComponent,
+    CaseEditComponent
   ],
   imports: [
+    // NgbModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    { provide: APP_BASE_HREF, useValue: '/' },
+    { provide: CaseService, useClass: CaseService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
