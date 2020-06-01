@@ -36,7 +36,9 @@ import { CaseEditComponent } from './case-edit/case-edit.component';
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },
-    { provide: CaseService, useClass: CaseService }
+    { provide: CaseService, useClass: CaseService },
+    { provide: 'API_URL', useValue: 'http://localhost:8090/api/testCases'}
+    //{ provide: 'API_URL', useValue: 'http://10.141.221.86:8090/api/testCases'}
   ],
   bootstrap: [AppComponent]
 })

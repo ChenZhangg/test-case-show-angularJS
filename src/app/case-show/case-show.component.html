@@ -1,4 +1,9 @@
-<ul class="nav nav-tabs fixed-top bg-light" id="myTab" role="tablist">
+<pre>{{ case | json }}</pre>
+<div *ngFor="let filepath of figPath">
+  {{ filepath }}
+  <img [src]="filepath" />
+</div>
+<!-- <ul class="nav nav-tabs fixed-top bg-light" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">Log</a>
   </li>
@@ -57,4 +62,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

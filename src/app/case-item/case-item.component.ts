@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Case } from '../case.model'
+import { CaseService } from '../case.service';
 
 @Component({
   selector: 'app-case-item',
@@ -9,10 +10,14 @@ import { Case } from '../case.model'
 export class CaseItemComponent implements OnInit {
   @Input() case: Case;
 
-  constructor() { 
+  constructor(private service: CaseService) { 
   }
 
   ngOnInit(): void {
   }
 
+  deleteCase(id: number): boolean {
+    this.service.delete(id);
+    return true;
+  }
 }

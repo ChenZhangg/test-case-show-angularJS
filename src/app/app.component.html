@@ -1,9 +1,15 @@
-<h1>Router Sample</h1>
+<h1>测试案例</h1>
 
-<a [routerLink]="['/testCases']">Home</a>
-<a [routerLink]="['/testCases/new']">New</a>
-<div id="content">
-  <div class="container">
-    <router-outlet></router-outlet>
-  </div>
+<div class="container">
+  <ul class="nav nav-pills bg-light">
+    <li class="nav-item">
+      <a [routerLink]="['/testCases']" class="nav-link">Home</a>
+    </li>
+    <li class="nav-item">
+      <a [routerLink]="['/testCases/new']" class="nav-link">New</a>
+    </li>
+  </ul>
+</div>
+<div class="container">
+  <router-outlet></router-outlet>
 </div>

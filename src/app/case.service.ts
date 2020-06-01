@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Case } from './case.model'
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class CaseService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, @Inject('API_URL') private apiUrl: string) {}
 
   index(): Case[] {
     var cases: Case[] = new Array<Case>();
-    this.http.get('http://localhost:8080/testCases').subscribe(
+    this.http.get(this.apiUrl).subscribe(
       data => {
         for (var i = 0; i <data['_embedded']['testCases'].length; i ++) {
           var tmp = data['_embedded']['testCases'][i]
@@ -32,9 +33,9 @@ export class CaseService {
     return cases;
   }
 
-  new(form: any): void {
+/*   new(form: any): void {
     this.http.post(
-      'http://localhost:8080/testCases', 
+      this.apiUrl, 
       JSON.stringify({repoName: form.repoName, 
         jobNumber: form.jobNumber,
         description: form.description,
@@ -46,15 +47,22 @@ export class CaseService {
         fixUrls: form.fixUrls,
       }), 
       {headers: new HttpHeaders().set('Content-type', 'application/json')}).subscribe();
+  } */
+
+  new(data: any): void {
+    this.http.post(
+      "http://localhost:8090/testCases", 
+      data,
+      {headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')}).subscribe();
   }
 
   edit(id: number): any {
-    return this.http.get(`http://localhost:8080/testCases/${id}`);
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
   update(form: any, id: number): void {
     this.http.patch(
-      `http://localhost:8080/testCases/${id}`, 
+      `${this.apiUrl}/${id}`, 
       JSON.stringify({
         // repoName: form.repoName, 
         // jobNumber: form.jobNumber,
@@ -69,28 +77,19 @@ export class CaseService {
       {headers: new HttpHeaders().set('Content-type', 'application/json')}).subscribe();
   }
 
-  show(id: number): Case {
-    let c: Case = null; 
-    this.http.get(`http://localhost:8080/testCases/${id}`).subscribe(
-      data => {
-        console.log(data);
-        c = new Case({
-          id: data['id'],
-          repoName: data['repoName'],
-          jobNumber: data['jobNumber'],
-          description: data['description'],
-          includeException: data['includeException'],
-          includeAssertion: data['includeAssertion'],
-          num: data['number'],
-          causeUrl: data['causeUrl'],
-          preCommit: data['preCommit'],
-          currentCommit: data['currentCommit'],
-          logURL: data['_links']['log'],
-          testItemsURL: data['_links']['testItems'],
-          changedFilesURL: data['_links']['changedFiles']
-        });
-      }
+  show(id: number) {
+    return this.http.get(`${this.apiUrl}/${id}`);
+  }
+
+  getFig(fileName: String) {
+    return this.http.get(`${this.apiUrl}/figs/${fileName}`);
+  }
+
+  delete(id: number) {
+    console.log(id);
+    console.log(`${this.apiUrl}/${id}`);
+    this.http.delete(`${this.apiUrl}/${id}`).subscribe(
+
     );
-    return c;
   }
 }

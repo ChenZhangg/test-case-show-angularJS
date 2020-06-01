@@ -9,6 +9,9 @@ export class Case {
   causeUrl: string;
   preCommit: string;
   currentCommit: string;
+  multipleCrash: boolean;
+  crashClusterNum: number;
+  figs: string[];
   diffUrl: string;
   logURL: string;
   testItemsURL: string;
@@ -26,6 +29,10 @@ export class Case {
     this.causeUrl              = obj && obj.causeUrl             || null;
     this.preCommit              = obj && obj.preCommit             || null;
     this.currentCommit              = obj && obj.currentCommit             || null;
+    this.multipleCrash              = obj && obj.multipleCrash             || null;
+    this.crashClusterNum              = obj && obj.crashClusterNum             || null;
+    this.figs              = obj && obj.figs             || null;
+
     this.diffUrl = `https://github.com/${this.repoName}/compare/${this.preCommit}...${this.currentCommit}`;
     this.logURL = obj && obj.logURL             || null;
     this.testItemsURL = obj && obj.testItemsURL             || null;
