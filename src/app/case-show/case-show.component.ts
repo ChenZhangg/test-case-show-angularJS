@@ -42,7 +42,7 @@ export class CaseShowComponent implements OnInit, OnChanges {
         console.log(data['figs'])
         console.log(data['figs'][0])
         for(let i in data['figs']) {
-          this.figPath.push(`http://localhost:8090/testCases/figs/${data['figs'][i]}`);
+          this.figPath.push(`http://10.141.221.86:8090/testCases/figs/${data['figs'][i]}`);
         }
       }
     );

@@ -78,7 +78,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
     formData.append("multipleCrash", f.multipleCrash);
     formData.append("crashClusterNum", f.crashClusterNum);
     formData.append("data", f);
-  
+    console.log(this.newOrEdit);
     if (this.newOrEdit) {
       this.service.new(formData);
     } else {

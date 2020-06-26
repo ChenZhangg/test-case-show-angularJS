@@ -51,7 +51,7 @@ export class CaseService {
 
   new(data: any): void {
     this.http.post(
-      "http://localhost:8090/testCases", 
+      "http://10.141.221.86:8090/testCases", 
       data,
       {headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')}).subscribe();
   }
@@ -62,7 +62,7 @@ export class CaseService {
 
   update(form: any, id: number): void {
     this.http.patch(
-      `${this.apiUrl}/${id}`, 
+      `http://10.141.221.86:8090/testCases/${id}`, 
       JSON.stringify({
         // repoName: form.repoName, 
         // jobNumber: form.jobNumber,
