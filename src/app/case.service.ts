@@ -60,21 +60,12 @@ export class CaseService {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  update(form: any, id: number): void {
+  update(data: any, id: number): void {
+    console.log(id);
     this.http.patch(
       `http://10.141.221.86:8090/testCases/${id}`, 
-      JSON.stringify({
-        // repoName: form.repoName, 
-        // jobNumber: form.jobNumber,
-        // description: form.description,
-        // includeException: form.includeException,
-        // includeAssertion: form.includeAssertion,
-        causeUrl: form.causeUrl,
-        preCommit: form.preCommit,
-        currentCommit: form.currentCommit,
-        // fixUrls: form.fixUrls,
-      }), 
-      {headers: new HttpHeaders().set('Content-type', 'application/json')}).subscribe();
+      data, 
+      {headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')}).subscribe();
   }
 
   show(id: number) {

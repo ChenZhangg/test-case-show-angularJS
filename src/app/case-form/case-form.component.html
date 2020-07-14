@@ -3,14 +3,14 @@
   <div class="form-row">
     <div class="form-group col-6">
       <label for="repoName">Repo Name</label> 
-      <input type="text" id="repoName" placeholder="" formControlName="repoName" class="form-control">
+      <input type="text" id="repoName" placeholder="" formControlName="repoName" class="form-control" [class.bg-warning]="form.controls['repoName'].touched && form.controls['repoName'].hasError('invalidRepoName')">
     </div>
     <div class="form-group col-6">
       <label for="jobNumber">Job Number</label> 
-      <input type="text" id="jobNumber" placeholder="" formControlName="jobNumber" class="form-control">
+      <input type="text" id="jobNumber" placeholder="" formControlName="jobNumber" class="form-control" [class.bg-warning]="form.controls['jobNumber'].touched && form.controls['jobNumber'].hasError('invalidJobNumber')">
     </div>
   </div>
-  
+
   <div class="form-row">
     <label for="description">Description</label>
     <textarea id="description" formControlName="description" cols="30" rows="10" class="form-control"></textarea>

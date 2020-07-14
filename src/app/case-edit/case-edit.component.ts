@@ -31,7 +31,9 @@ export class CaseEditComponent implements OnInit {
           num: data['number'],
           causeUrl: data['causeUrl'],
           preCommit: data['preCommit'],
-          currentCommit: data['currentCommit']
+          currentCommit: data['currentCommit'],
+          multipleCrash: data['multipleCrash'],
+          crashClusterNum: data['crashClusterNum']
         });
       }
     );
