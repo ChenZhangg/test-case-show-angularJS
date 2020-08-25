@@ -33,7 +33,12 @@ export class CaseEditComponent implements OnInit {
           preCommit: data['preCommit'],
           currentCommit: data['currentCommit'],
           multipleCrash: data['multipleCrash'],
-          crashClusterNum: data['crashClusterNum']
+          crashClusterNum: data['crashClusterNum'],
+
+          multipleAssertion: data['multipleAssertion'],
+          assertionClusterNum: data['assertionClusterNum'],
+          multipleError: data['multipleError'],
+          clusterNum: data['clusterNum']
         });
       }
     );

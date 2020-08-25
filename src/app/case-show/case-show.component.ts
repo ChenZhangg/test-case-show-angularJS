@@ -37,12 +37,17 @@ export class CaseShowComponent implements OnInit, OnChanges {
           figs: data['figs'],
           logURL: data['_links']['log'],
           testItemsURL: data['_links']['testItems'],
-          changedFilesURL: data['_links']['changedFiles']
+          changedFilesURL: data['_links']['changedFiles'],
+
+          multipleAssertion: data['multipleAssertion'],
+          assertionClusterNum: data['assertionClusterNum'],
+          multipleError: data['multipleError'],
+          clusterNum: data['clusterNum']
         });
         console.log(data['figs'])
         console.log(data['figs'][0])
         for(let i in data['figs']) {
-          this.figPath.push(`http://10.141.221.86:8090/testCases/figs/${data['figs'][i]}`);
+          this.figPath.push(`http://10.176.34.86:8090/testCases/figs/${data['figs'][i]}`);
         }
       }
     );

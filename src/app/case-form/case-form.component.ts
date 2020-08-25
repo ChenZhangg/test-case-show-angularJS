@@ -36,6 +36,16 @@ export class CaseFormComponent implements OnInit, OnChanges {
         this.form.controls.multipleCrash.setValue(this.case.multipleCrash);
       }
       this.form.controls.crashClusterNum.setValue(this.case.crashClusterNum);
+
+      if(this.case.multipleAssertion == true) {
+        this.form.controls.multipleAssertion.setValue(this.case.multipleAssertion);
+      }
+      this.form.controls.assertionClusterNum.setValue(this.case.assertionClusterNum);
+
+      if(this.case.multipleError == true) {
+        this.form.controls.multipleError.setValue(this.case.multipleError);
+      }
+      this.form.controls.clusterNum.setValue(this.case.clusterNum);
     }
   }
 
@@ -46,13 +56,18 @@ export class CaseFormComponent implements OnInit, OnChanges {
       description: [''],
       includeException: [false],
       includeAssertion: [false],
-      multipleException: [false],
-      multipleAssertion: [false],
-      causeUrl: [''],
-      preCommit: [''],
-      currentCommit: [''],
+
+      multipleError: [true],
       multipleCrash: [false],
-      crashClusterNum: ['', Validators.required],
+      multipleAssertion: [false],
+
+      clusterNum: [0, numberValidator],
+      crashClusterNum: [0, numberValidator],
+      assertionClusterNum: [0, numberValidator],
+
+      causeUrl: [''],
+      preCommit: ['', shaValidator],
+      currentCommit: ['', shaValidator],
       fixUrls: this.fb.array([this.fb.control('')]),
       figs:  ['']
     });
@@ -71,8 +86,8 @@ export class CaseFormComponent implements OnInit, OnChanges {
       } else {
         this.form.get(ctrl).valueChanges.subscribe(
           (value: string) => {
-            console.log("====" + ctrl.constructor.name + ctrl);
-            console.log(value);
+            //console.log("====" + ctrl.constructor.name + ctrl);
+            //console.log(value);
 
           });
       }
@@ -81,6 +96,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
 
   onSubmit(): void { 
     console.log('you submitted value:', this.form.value);
+
     const formData =  new FormData();
     for  (var i =  0; i <  this.files.length; i++)  {  
         formData.append("files",  this.files[i]);
@@ -98,6 +114,12 @@ export class CaseFormComponent implements OnInit, OnChanges {
     formData.append("multipleCrash", f.multipleCrash);
     formData.append("crashClusterNum", f.crashClusterNum);
     formData.append("data", f);
+
+    formData.append("multipleAssertion", f.multipleAssertion);
+    formData.append("assertionClusterNum", f.assertionClusterNum);
+    formData.append("multipleError", f.multipleError);
+    formData.append("clusterNum", f.clusterNum);
+
     console.log(this.newOrEdit);
     if (this.newOrEdit) {
       this.service.new(formData);
@@ -156,5 +178,17 @@ function repoNameValidator(control: FormControl):{[s:string]: boolean}{
 function jobNumberValidator(control: FormControl):{[s:string]: boolean}{ 
   if (!control.value.match(/^\d+\.\d+$/)) {
     return {invalidJobNumber: true}; 
+  }
+}
+
+function numberValidator(control: FormControl):{[s:string]: boolean}{ 
+  if (control.value == null || !control.value.toString().match(/^\d+$/)) {
+    return {invalidNumber: true}; 
+  }
+}
+
+function shaValidator(control: FormControl):{[s:string]: boolean}{ 
+  if (control.value == null || !control.value.match(/^\w+$/)) {
+    return {invalidSha: true}; 
   }
 }

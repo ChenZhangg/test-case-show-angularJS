@@ -51,7 +51,7 @@ export class CaseService {
 
   new(data: any): void {
     this.http.post(
-      "http://10.141.221.86:8090/testCases", 
+      "http://10.176.34.86:8090/testCases", 
       data,
       {headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')}).subscribe();
   }
@@ -63,7 +63,7 @@ export class CaseService {
   update(data: any, id: number): void {
     console.log(id);
     this.http.patch(
-      `http://10.141.221.86:8090/testCases/${id}`, 
+      `http://10.176.34.86:8090/testCases/${id}`, 
       data, 
       {headers: new HttpHeaders().set('Access-Control-Allow-Origin', '*')}).subscribe();
   }

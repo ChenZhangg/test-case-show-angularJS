@@ -18,25 +18,35 @@ export class Case {
   changedFilesURL: string;
   log: string
 
+  multipleAssertion: boolean;
+  assertionClusterNum: number;
+  multipleError: boolean;
+  clusterNum: number;
+  
   constructor(obj?: any) {
     this.id              = obj && obj.id             || null;
     this.repoName              = obj && obj.repoName             || null;
     this.jobNumber           = obj && obj.jobNumber          || null;
     this.description           = obj && obj.description          || null;
-    this.includeException           = obj && obj.includeException          || null;
-    this.includeAssertion           = obj && obj.includeAssertion          || null;
+    this.includeException           = obj && obj.includeException          || false;
+    this.includeAssertion           = obj && obj.includeAssertion          || false;
     this.num           = obj && obj.num          || null;
     this.causeUrl              = obj && obj.causeUrl             || null;
     this.preCommit              = obj && obj.preCommit             || null;
     this.currentCommit              = obj && obj.currentCommit             || null;
-    this.multipleCrash              = obj && obj.multipleCrash             || null;
-    this.crashClusterNum              = obj && obj.crashClusterNum             || null;
+    this.multipleCrash              = obj && obj.multipleCrash             || false;
+    this.crashClusterNum              = obj && obj.crashClusterNum             || 0;
     this.figs              = obj && obj.figs             || null;
 
     this.diffUrl = `https://github.com/${this.repoName}/compare/${this.preCommit}...${this.currentCommit}`;
     this.logURL = obj && obj.logURL             || null;
     this.testItemsURL = obj && obj.testItemsURL             || null;
     this.changedFilesURL= obj && obj.changedFilesURL             || null;
+
+    this.multipleAssertion              = obj && obj.multipleAssertion             || false;
+    this.assertionClusterNum              = obj && obj.assertionClusterNum             || 0;
+    this.multipleError              = obj && obj.multipleError             || false;
+    this.clusterNum              = obj && obj.clusterNum             || 0;
   }
 }
 
