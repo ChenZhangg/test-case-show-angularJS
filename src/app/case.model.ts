@@ -2,7 +2,7 @@ export class Case {
   id: number;
   repoName: string;
   jobNumber: string;
-  description: string
+  description: string;
   includeException: boolean;
   includeAssertion: boolean;
   num: number;
@@ -16,13 +16,13 @@ export class Case {
   logURL: string;
   testItemsURL: string;
   changedFilesURL: string;
-  log: string
+  log: string;
 
   multipleAssertion: boolean;
   assertionClusterNum: number;
   multipleError: boolean;
   clusterNum: number;
-  
+
   constructor(obj?: any) {
     this.id              = obj && obj.id             || null;
     this.repoName              = obj && obj.repoName             || null;
@@ -41,7 +41,7 @@ export class Case {
     this.diffUrl = `https://github.com/${this.repoName}/compare/${this.preCommit}...${this.currentCommit}`;
     this.logURL = obj && obj.logURL             || null;
     this.testItemsURL = obj && obj.testItemsURL             || null;
-    this.changedFilesURL= obj && obj.changedFilesURL             || null;
+    this.changedFilesURL = obj && obj.changedFilesURL             || null;
 
     this.multipleAssertion              = obj && obj.multipleAssertion             || false;
     this.assertionClusterNum              = obj && obj.assertionClusterNum             || 0;
@@ -54,7 +54,7 @@ export class TestItem {
   className: string;
   methodName: string;
   errorMessage: string;
-  stackTrace: string
+  stackTrace: string;
 
   constructor(obj?: any) {
     this.className              = obj && obj.className             || null;
@@ -68,7 +68,7 @@ export class ChangedMethod {
   className: string;
   methodName: string;
   startLineNumber: number;
-  endLineNumber: number
+  endLineNumber: number;
 
   constructor(obj?: any) {
     this.className              = obj && obj.className             || null;
@@ -82,8 +82,8 @@ export class ChangedFile {
   status: string;
   preFilePath: string;
   currentFilePath: string;
-  changedMethodsURL: string
-  changedMethods: ChangedMethod[]
+  changedMethodsURL: string;
+  changedMethods: ChangedMethod[];
 
   constructor(obj?: any) {
     this.status              = obj && obj.status             || null;

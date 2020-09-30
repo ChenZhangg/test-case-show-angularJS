@@ -13,7 +13,8 @@ export class CaseShowComponent implements OnInit, OnChanges {
   id: number;
   case: Case;
   figPath: string[] = [];
-  constructor(private route: ActivatedRoute,private service: CaseService, private http: HttpClient) { 
+
+  constructor(private route: ActivatedRoute, private service: CaseService, private http: HttpClient) {
     route.params.subscribe(params => { this.id = params['id']; });
   }
 
@@ -44,19 +45,17 @@ export class CaseShowComponent implements OnInit, OnChanges {
           multipleError: data['multipleError'],
           clusterNum: data['clusterNum']
         });
-        console.log(data['figs'])
-        console.log(data['figs'][0])
+
         for(let i in data['figs']) {
           this.figPath.push(`http://10.176.34.86:8090/testCases/figs/${data['figs'][i]}`);
         }
       }
     );
-
   }
 
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+  ngOnChanges(changes: import('@angular/core').SimpleChanges): void {
     console.log(changes);
-    if(this.case){
+    if(this.case) {
       this.http.get(this.case.logURL).subscribe(
         data => {
           console.log(data);
@@ -65,4 +64,12 @@ export class CaseShowComponent implements OnInit, OnChanges {
     }
   }
 
+  /*
+  * 删除图片
+  * @param:当前图片的路径
+  * @retrun:
+  * */
+  deletePicture(filename: string): void {
+    this.service.deleteFigure(this.case.id, filename);
+  }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { Case } from '../case.model'
-import { CaseService } from '../case.service'
+import { HttpClient } from '@angular/common/http';
+import { Case } from '../case.model';
+import { CaseService } from '../case.service';
 
 @Component({
   selector: 'app-case-list',
@@ -12,8 +12,8 @@ export class CaseListComponent implements OnInit {
   data: object;
   cases: Case[];
   repo_names: string[];
-  constructor(private http: HttpClient, private service: CaseService) { 
-    //this.cases = new Array<Case>();
+  constructor(private http: HttpClient, private service: CaseService) {
+    // this.cases = new Array<Case>();
   }
 
   ngOnInit(): void {

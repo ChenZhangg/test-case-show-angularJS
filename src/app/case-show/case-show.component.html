@@ -1,6 +1,7 @@
 <pre>{{ case | json }}</pre>
-<div *ngFor="let filepath of figPath">
+<div *ngFor="let filepath of figPath" >
   {{ filepath }}
+  <button (click)="deletePicture(filepath)"> 删除图片 </button>
   <img [src]="filepath" />
 </div>
 <!-- <ul class="nav nav-tabs fixed-top bg-light" id="myTab" role="tablist">
@@ -27,7 +28,7 @@
     <div class="row bg-info">
       {{ testItems.length }}
     </div>
-    <div class="container" *ngFor="let c of testItems"> 
+    <div class="container" *ngFor="let c of testItems">
       <div class="row bg-success">
         {{ c.className }}
       </div>
@@ -44,7 +45,7 @@
   </div>
 
   <div class="tab-pane fade" id="match" role="tabpanel" aria-labelledby="cmatch-tab">
-    <div class="container" *ngFor="let c of changedFiles"> 
+    <div class="container" *ngFor="let c of changedFiles">
       <div class="row bg-success">
         {{ c.status }}
       </div>

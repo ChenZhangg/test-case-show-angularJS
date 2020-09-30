@@ -9,5 +9,5 @@ import { Router } from '@angular/router';
 export class AppComponent {
   title = 'test-case-show-angularJS';
   constructor(private router: Router) {
-  };
+  }
 }

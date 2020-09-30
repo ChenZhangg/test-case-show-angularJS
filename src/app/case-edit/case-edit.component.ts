@@ -12,7 +12,7 @@ export class CaseEditComponent implements OnInit {
 
   id: number;
   case: Case;
-  constructor(private route: ActivatedRoute, private service: CaseService) { 
+  constructor(private route: ActivatedRoute, private service: CaseService) {
     route.params.subscribe(params => { this.id = params['id']; });
   }
 

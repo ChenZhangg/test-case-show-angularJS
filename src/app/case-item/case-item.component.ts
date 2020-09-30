@@ -10,7 +10,7 @@ import { CaseService } from '../case.service';
 export class CaseItemComponent implements OnInit {
   @Input() case: Case;
 
-  constructor(private service: CaseService) { 
+  constructor(private service: CaseService) {
   }
 
   ngOnInit(): void {
