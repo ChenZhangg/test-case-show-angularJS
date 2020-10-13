@@ -1,4 +1,6 @@
-<pre>{{ case | json }}</pre>
+<!--<pre>{{ case | json }}</pre>-->
+<app-case-form [case]="case" [newOrEdit]="false" [id]="id"></app-case-form>
+
 <div *ngFor="let filepath of figPath" >
   {{ filepath }}
   <button (click)="deletePicture(filepath)"> 删除图片 </button>

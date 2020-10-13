@@ -1,20 +1,21 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Case } from './case.model';
 import { Observable } from 'rxjs';
+import * as $ from 'jquery';
 
 @Injectable()
 export class CaseService {
 
   constructor(private http: HttpClient,
-              @Inject('API_URL') private apiUrl: string, // 生产环境 rest处理
-              @Inject('API_URL_S') private apiUrlS: string, // 生产环境 自己处理
-              @Inject('API_URL_DS') private  apiUrlD: string) {
+              @Inject('REST_URL') private RestUrl: string, // rest处理
+              @Inject('MY_URL') private MyUrl: string) {// 自己处理
   }
 
   index(): Case[] {
     let cases: Case[] = new Array<Case>();
-    this.http.get(this.apiUrl).subscribe(
+    this.http.get(this.RestUrl).subscribe(
       data => {
         for (let i = 0; i < data['_embedded']['testCases'].length; i ++) {
           let tmp = data['_embedded']['testCases'][i];
@@ -59,20 +60,18 @@ export class CaseService {
   * @return: NULL
   * */
   new(data: any): void {
-    console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
-    console.log('api:', this.apiUrlD);
     this.http.post(
       // 'http://10.176.34.86:8090/testCases/', data,
       // `http://localhost:8090/testCases/`, data,
       // 开发环境
       // `${this.apiUrlD}`, data,
       // 生产环境
-      `${this.apiUrlS}`, data,
+      `${this.MyUrl}`, data,
       {
         headers:
           new HttpHeaders().set('Access-Control-Allow-Origin', '*')
-      })
-      .subscribe();
+      }).subscribe();
+
   }
 
   /*
@@ -81,7 +80,12 @@ export class CaseService {
   * @return:
   * */
   edit(id: number): any {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(
+      `${this.RestUrl}/${id}`,
+      {
+        headers:
+          new HttpHeaders().set('Access-Control-Allow-Origin', '*')
+      });
   }
 
   /*
@@ -91,7 +95,8 @@ export class CaseService {
   update(data: any, id: number): void {
     console.log(id);
     this.http.patch(
-      `http://10.176.34.86:8090/testCases/${id}`, data,
+      // `http://10.176.34.86:8090/testCases/${id}`, data,
+      `${this.MyUrl}/${id}`, data,
       {
         headers:
           new HttpHeaders().set('Access-Control-Allow-Origin', '*')
@@ -105,7 +110,7 @@ export class CaseService {
   * @return:
   * */
   show(id: number) {
-    return this.http.get(`${this.apiUrl}/${id}`);
+    return this.http.get(`${this.RestUrl}/${id}`);
   }
 
   /*
@@ -115,7 +120,7 @@ export class CaseService {
   * */
   // tslint:disable-next-line:ban-types
   getFig(fileName: String) {
-    return this.http.get(`${this.apiUrl}/figs/${fileName}`);
+    return this.http.get(`${this.RestUrl}/figs/${fileName}`);
   }
 
   /*
@@ -125,8 +130,8 @@ export class CaseService {
   * */
   delete(id: number): void {
     console.log(id);
-    console.log(`${this.apiUrl}/${id}`);
-    this.http.delete(`${this.apiUrl}/${id}`).subscribe(
+    console.log(`${this.RestUrl}/${id}`);
+    this.http.delete(`${this.RestUrl}/${id}`).subscribe(
     );
   }
 
@@ -138,9 +143,11 @@ export class CaseService {
   // @ts-ignore
   deleteFigure(id: number, filepath: string): void {
     console.log('到deletefigure 这里了！', filepath);
-    this.http.delete(`http://localhost:8090/testCases?id=${id}&filepath=${filepath}`).subscribe(
+    this.http.delete(`${this.MyUrl}?id=${id}&filepath=${filepath}`).subscribe(
       data => {
         console.log(data);
       });
   }
+
+
 }

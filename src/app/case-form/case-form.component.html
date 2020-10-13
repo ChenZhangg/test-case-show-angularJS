@@ -3,11 +3,11 @@
 <form [formGroup]="form" class="color-form" (ngSubmit)="onSubmit()">
   <div class="form-row">
     <div class="form-group col-6">
-      <label for="repoName">Repo Name</label> 
+      <label for="repoName">Repo Name</label>
       <input type="text" id="repoName" placeholder="" formControlName="repoName" class="form-control" [class.bg-warning]="form.controls['repoName'].hasError('invalidRepoName')">
     </div>
     <div class="form-group col-6">
-      <label for="jobNumber">Job Number</label> 
+      <label for="jobNumber">Job Number</label>
       <input type="text" id="jobNumber" placeholder="" formControlName="jobNumber" class="form-control" [class.bg-warning]="form.controls['jobNumber'].hasError('invalidJobNumber')">
     </div>
   </div>
@@ -20,11 +20,11 @@
   <div class="form-row">
     <div class="form-group col">
       <input type="checkbox" id="includeException" formControlName="includeException" class="filled-in chk-col-info">
-      <label for="includeException">包含异常错误</label> 
+      <label for="includeException">包含异常错误</label>
     </div>
     <div class="form-group col">
       <input type="checkbox" id="includeAssertion" formControlName="includeAssertion" class="filled-in chk-col-info">
-      <label for="includeAssertion">包含断言错误</label> 
+      <label for="includeAssertion">包含断言错误</label>
     </div>
   </div>
   <div class="form-row">
@@ -34,11 +34,11 @@
 
   <div class="form-row">
     <div class="form-group col-md-6">
-      <label for="preCommit">Pre Commit SHA</label> 
+      <label for="preCommit">Pre Commit SHA</label>
       <input type="text" id="preCommit" placeholder="" formControlName="preCommit" class="form-control" [class.bg-warning]="form.controls['preCommit'].hasError('invalidSha')">
     </div>
     <div class="form-group col-md-6">
-      <label for="currentCommit">Current Commit SHA</label> 
+      <label for="currentCommit">Current Commit SHA</label>
       <input type="text" id="currentCommit" placeholder="" formControlName="currentCommit" class="form-control" [class.bg-warning]="form.controls['currentCommit'].hasError('invalidSha')">
     </div>
   </div>
@@ -46,21 +46,21 @@
   <div class="form-row">
     <div class="form-group col">
       <input type="checkbox" id="multipleAssertion" formControlName="multipleAssertion" class="filled-in chk-col-info">
-      <label for="multipleAssertion">包含多个断言错误</label> 
+      <label for="multipleAssertion">包含多个断言错误</label>
     </div>
     <div class="form-group col">
-      <label for="crashClusterNum">断言错误分类数目</label> 
-      <input type="text" id="assertionClusterNum" formControlName="assertionClusterNum" class="form-control" [class.bg-warning]="form.controls['assertionClusterNum'].hasError('invalidNumber')"> 
+      <label for="crashClusterNum">断言错误分类数目</label>
+      <input type="text" id="assertionClusterNum" formControlName="assertionClusterNum" class="form-control" [class.bg-warning]="form.controls['assertionClusterNum'].hasError('invalidNumber')">
     </div>
   </div>
 
   <div class="form-row">
     <div class="form-group col">
       <input type="checkbox" id="multipleCrash" formControlName="multipleCrash" class="filled-in chk-col-info">
-      <label for="multipleCrash">包含多个异常错误</label> 
+      <label for="multipleCrash">包含多个异常错误</label>
     </div>
     <div class="form-group col">
-      <label for="crashClusterNum">异常错误分类数目</label> 
+      <label for="crashClusterNum">异常错误分类数目</label>
       <input type="text" id="crashClusterNum" formControlName="crashClusterNum" class="form-control" [class.bg-warning]="form.controls['crashClusterNum'].hasError('invalidNumber')">
     </div>
   </div>
@@ -68,10 +68,10 @@
   <div class="form-row">
     <div class="form-group col">
       <input type="checkbox" id="multipleError" formControlName="multipleError" class="filled-in chk-col-info">
-      <label for="multipleError">包含多个测试用例错误</label> 
+      <label for="multipleError">包含多个测试用例错误</label>
     </div>
     <div class="form-group col">
-      <label for="clusterNum">错误分类数目</label> 
+      <label for="clusterNum">错误分类数目</label>
       <input type="text" id="clusterNum" formControlName="clusterNum" class="form-control" [class.bg-warning]="form.controls['clusterNum'].hasError('invalidNumber')">
     </div>
   </div>
@@ -87,13 +87,13 @@
 
   <div class="form-row">
     <label for="figs">添加截图</label>
-    <input multiple type="file" class="form-control" formControlName="figs" (change)="onFileChanged($event)">
+    <input id="figs" multiple  type="file" class="form-control" formControlName="figs" (change)="onFileChanged($event)">
   </div>
 
   <div class="form-row" *ngFor="let file of files; let i=index">
     {{ file.name }}
   </div>
-
+  <br>
   <div class="form-group">
     <button type="submit" class="btn btn-link bg-white text-info shadow px-5">Submit</button>
   </div>

@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
   templateUrl: './case-form.component.html',
   styleUrls: ['./case-form.component.css']
 })
+
+
 export class CaseFormComponent implements OnInit, OnChanges {
   @Input() case: Case;
   @Input() newOrEdit: boolean;
@@ -16,7 +18,9 @@ export class CaseFormComponent implements OnInit, OnChanges {
   form: FormGroup;
   files: File[]  =  [];
   editFormData: FormData = new FormData();
-  constructor(private fb: FormBuilder, private service: CaseService, private router: Router) {
+  constructor(private fb: FormBuilder,
+              private service: CaseService,
+              private router: Router) {
   }
   ngOnChanges(changes: import('@angular/core').SimpleChanges): void {
     if (this.case) {
@@ -57,7 +61,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
       includeException: [false],
       includeAssertion: [false],
 
-      multipleError: [true],
+      multipleError: [false],
       multipleCrash: [false],
       multipleAssertion: [false],
 
@@ -69,7 +73,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
       preCommit: ['', shaValidator],
       currentCommit: ['', shaValidator],
       fixUrls: this.fb.array([this.fb.control('')]),
-      figs:  ['']
+      figs: ['']
     });
 
     for (const ctrl in this.form.controls) {
@@ -98,7 +102,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
     console.log('you submitted value:', this.form.value);
 
     const formData =  new FormData();
-    for (let i =  0; i <  this.files.length; i++)  {
+    for (let i = 0; i <  this.files.length; i++)  {
         formData.append('files',  this.files[i]);
     }
     const f = this.form.value;
@@ -120,16 +124,13 @@ export class CaseFormComponent implements OnInit, OnChanges {
     formData.append('multipleError', f.multipleError);
     formData.append('clusterNum', f.clusterNum);
 
-    console.log('awelkjfwalekjflwakejflkwaejflkwaejf', this.newOrEdit);
     if (this.newOrEdit) {
-      console.log('=-=-=-=-=-=-=-=-=-=-');
       this.service.new(formData);
     } else {
       this.service.update(formData, this.id);
     }
     this.router.navigate(['testCases']);
-
-  }
+    }
 
   get fixUrls() {
     return this.form.get('fixUrls') as FormArray;
@@ -145,7 +146,6 @@ export class CaseFormComponent implements OnInit, OnChanges {
         this.fixUrls.push(this.fb.control(''));
         break;
     }
-
     return false;
   }
 
@@ -154,7 +154,6 @@ export class CaseFormComponent implements OnInit, OnChanges {
       case 'fixUrls':
         this.fixUrls.removeAt(index);
         break;
-
     }
     return false;
   }
@@ -166,7 +165,6 @@ export class CaseFormComponent implements OnInit, OnChanges {
       this.files.push(event.target.files[i]);
     }
   }
-
 }
 
 function repoNameValidator(control: FormControl): {[s: string]: boolean} {
