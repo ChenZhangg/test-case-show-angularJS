@@ -1,9 +1,15 @@
-import { Component, OnInit, OnChanges, Input, Inject} from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
+import { Component, ViewChild, TemplateRef, OnInit, OnChanges, Input, Inject, ElementRef} from '@angular/core';
 import { CaseService } from '../case.service';
 import { ActivatedRoute } from '@angular/router';
 import { Case, TestItem, ChangedFile, ChangedMethod } from '../case.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { fileURLToPath } from 'url';
+
+import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
+
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-case-show',
@@ -15,12 +21,40 @@ export class CaseShowComponent implements OnInit, OnChanges {
   id: number;
   case: Case;
   figPath: string[] = [];
+  tempfigpath: string; // 修改图片名称和删除图片的时候用到
+  form: FormGroup;
+  newfigpath: string;
+  modalRef: BsModalRef;
+  changeFigNamemessage: boolean; // 表示修改图片名称成功与否 true 表示成功。
+  deleteFigmessage: boolean ;
+
+  deleteOrchange: number; // 表示是按了删除还是修改按钮  其中 0表示删除，1表示修改
+  @ViewChild('deleteFig')
+  deleteModal: TemplateRef<any>;
+  @ViewChild('check')
+  check: TemplateRef<any>;
 
   constructor(private route: ActivatedRoute,
               private service: CaseService,
               private http: HttpClient,
-              @Inject('MY_URL') private MyUrl: string) {
+              @Inject('MY_URL') private MyUrl: string,
+              private modalService: BsModalService,
+              private fb: FormBuilder,
+              private router: Router) {
+    this.changeFigNamemessage = false;
+    this.deleteFigmessage = false;
     route.params.subscribe(params => { this.id = params['id']; });
+    /**
+     * newfigpath 是重新输入图片路径的文本框 需要验证 不为空&字符串格式两项格式
+     */
+    this.form = new FormGroup(
+      {
+        newfigpath: new FormControl('',
+      [
+        Validators.required,
+        Validators.pattern('^[\-0-9a-zA-Z]+_[\-0-9a-zA-Z]+_([1-9][0-9]*)+(\.[0-9]{1,2})?_[a-zA-Z]+$'),
+      ]),
+   });
   }
 
   ngOnInit() {
@@ -55,18 +89,21 @@ export class CaseShowComponent implements OnInit, OnChanges {
         });
 
         for (let i in data['figs']) {
-         this.figPath.push(`${this.MyUrl}/figs/${data['figs'][i]}`);
+          // 如果图片是空的，那就不要加到显示里面去。
+          if(data['figs'][i]!=''){
+            this.figPath.push(`${this.MyUrl}/figs/${data['figs'][i]}`);
+          }
         }
 
       }
     );
   }
 
-  /*
-  * 图片数组进行排序
-  * @param: 文件路径 是个string数组
-  * @return: void
-  * */
+  /**
+   * 图片数组进行排序
+   * @param: 文件路径 是个string数组
+   * @return: void
+   */
   Sort(figpath: string[] ): void {
     let length = figpath.length;
     let temp = new Map();
@@ -109,12 +146,93 @@ export class CaseShowComponent implements OnInit, OnChanges {
     }
   }
 
-  /*
-  * 删除图片
-  * @param:当前图片的路径
-  * @retrun:
-  * */
-  deletePicture(filename: string): void {
-    this.service.deleteFigure(this.case.id, filename);
+  /**
+   * 删除图片
+   * @param filename
+   * @return void
+   */
+  deletePicture(): void {
+    this.service.deleteFigure(this.case.id, this.tempfigpath).subscribe(
+      judge => {
+        if (judge) {
+          this.deleteOrchange = 1;
+        }
+        this.deleteFigmessage = true;
+        this.openCheck();
+      }
+    );
   }
+
+  /**
+   * 打开修改名称窗口
+   * @param: template
+   * @param 输入图片路径 string
+   * @return :void
+   */
+  openChangeNameModal(template: TemplateRef<any>, figpath: string) {
+    this.modalRef = this.modalService.show(template);
+
+    this.tempfigpath = figpath; // 旧的figpath
+    console.log('figpath', figpath);
+  }
+
+  openDeleteModal(template: TemplateRef<any>, figpath: string) {
+    this.tempfigpath = figpath;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  /**
+   * 打开删除图片确认信息窗口
+   */
+  openCheck() {
+    this.modalRef = this.modalService.show(this.check);
+  }
+
+  /**
+   * 输入图片名界面确认
+   * 现在才发送请求去修改名称
+   */
+  confirmChangeName(): void {
+    this.modalRef.hide();
+
+    console.log(this.form.controls.newfigpath.value);
+    const data =  new FormData();
+    data.append('figpath', this.tempfigpath);
+    data.append('newfigname', this.form.controls.newfigpath.value);
+    this.http.patch(
+      `${this.MyUrl}/changeName/${this.id}`,
+      data,
+      {
+        headers:
+          new HttpHeaders().set('Access-Control-Allow-Origin', '*')
+      }
+    ).subscribe(
+      check => {
+        if (check) {
+          this.changeFigNamemessage = true;
+        }
+        // 调出框来
+        this.deleteOrchange = 2;
+        this.openCheck();
+      }
+    );
+
+  }
+
+  /**
+   * 界面取消等操作
+   */
+  decline(): void {
+    this.modalRef.hide();
+
+    // 如果成功就刷新当前页面。
+    if (this.changeFigNamemessage || this.deleteFigmessage) {
+      window.location.reload();
+      // this.destination.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+    }
+  }
+
 }
+
+
+

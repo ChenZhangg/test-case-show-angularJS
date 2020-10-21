@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { CaseService } from '../case.service';
 import { Case } from '../case.model';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-case-form',
@@ -126,10 +126,11 @@ export class CaseFormComponent implements OnInit, OnChanges {
 
     if (this.newOrEdit) {
       this.service.new(formData);
+
     } else {
       this.service.update(formData, this.id);
     }
-    this.router.navigate(['testCases']);
+    setTimeout(() => { this.router.navigate(['testCases']); }, 2000);
     }
 
   get fixUrls() {
@@ -140,7 +141,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
     return this.form.get('logFigs') as FormArray;
   }
 
-  add(label: String) {
+  add(label: string) {
     switch (label) {
       case 'fixUrls':
         this.fixUrls.push(this.fb.control(''));
@@ -149,7 +150,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
     return false;
   }
 
-  delete(label: String, index: number) {
+  delete(label: string, index: number) {
     switch (label) {
       case 'fixUrls':
         this.fixUrls.removeAt(index);
@@ -160,7 +161,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
 
   onFileChanged(event) {
     console.log(event.target.files);
-    for  (let i =  0; i <  event.target.files.length; i++)  {
+    for (let i =  0; i <  event.target.files.length; i++)  {
       console.log(event.target.files[i]);
       this.files.push(event.target.files[i]);
     }

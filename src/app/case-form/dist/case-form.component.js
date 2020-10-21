@@ -9,11 +9,10 @@ exports.__esModule = true;
 exports.CaseFormComponent = void 0;
 var core_1 = require("@angular/core");
 var CaseFormComponent = /** @class */ (function () {
-    function CaseFormComponent(fb, service, router, changeDetector) {
+    function CaseFormComponent(fb, service, router) {
         this.fb = fb;
         this.service = service;
         this.router = router;
-        this.changeDetector = changeDetector;
         this.files = [];
         this.editFormData = new FormData();
     }
@@ -85,6 +84,7 @@ var CaseFormComponent = /** @class */ (function () {
         }
     };
     CaseFormComponent.prototype.onSubmit = function () {
+        var _this = this;
         console.log('you submitted value:', this.form.value);
         var formData = new FormData();
         for (var i = 0; i < this.files.length; i++) {
@@ -113,9 +113,8 @@ var CaseFormComponent = /** @class */ (function () {
         else {
             this.service.update(formData, this.id);
         }
-        this.router.navigate(['testCases']);
-        // 这里？？？？更新视图？
-        this.changeDetector.detectChanges();
+        setTimeout(function () { _this.router.navigate(['testCases']); }, 2000);
+        // this.router.navigate(['testCases']);
     };
     Object.defineProperty(CaseFormComponent.prototype, "fixUrls", {
         get: function () {

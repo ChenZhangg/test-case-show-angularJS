@@ -15,6 +15,9 @@ import { CaseService } from './case.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CaseNewComponent } from './case-new/case-new.component';
 import { CaseEditComponent } from './case-edit/case-edit.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { AlertModule } from 'ngx-bootstrap/alert';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,7 @@ import { CaseEditComponent } from './case-edit/case-edit.component';
     CaseShowComponent,
     CaseFormComponent,
     CaseNewComponent,
-    CaseEditComponent
+    CaseEditComponent,
   ],
   imports: [
     // NgbModule,
@@ -32,7 +35,9 @@ import { CaseEditComponent } from './case-edit/case-edit.component';
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ModalModule.forRoot(),
+    AlertModule.forRoot(),
   ],
   providers: [
     { provide: APP_BASE_HREF, useValue: '/' },

@@ -1,11 +1,90 @@
 <!--<pre>{{ case | json }}</pre>-->
 <app-case-form [case]="case" [newOrEdit]="false" [id]="id"></app-case-form>
 
-<div *ngFor="let filepath of figPath" >
+<div *ngFor="let filepath of figPath" #destination >
   {{ filepath }}
-  <button (click)="deletePicture(filepath)"> 删除图片 </button>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <button class="btn btn-primary" (click)="openDeleteModal(deleteFig, filepath)"> 删除图片 </button>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <button class="btn btn-primary" (click)="openChangeNameModal(changeFigname, filepath)"> 修改图片名称 </button>
+
   <img [src]="filepath" />
+  <HR style="border:1 dashed #987cb9" width="80%" color=#987cb9 SIZE=1>
 </div>
+
+<!-- 修改图片名的模态框 -->
+<ng-template #changeFigname>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">修改图片</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p>将图片名称修改为：</p>
+    <form [formGroup]="form"  >
+      <input type="text" formControlName="newfigpath" id="newfigpath" class="form-control" required autocomplete="off">
+      <br>
+      <div *ngIf="form.controls.newfigpath.touched">
+        <p *ngIf="form.controls.newfigpath.hasError('required')">
+          <alert type="danger">
+            <strong>不能为空</strong><br>请重新输入
+          </alert>
+        </p>
+        <p *ngIf="form.controls.newfigpath.hasError('pattern')">
+          <alert type="danger">
+            <strong>格式不正确</strong><br>应为xxx_xxx_123.1_xxx或者xxx-xxx_xxx-xxx_123.1_xxx且不能包含空格
+          </alert>
+        </p>
+      </div>
+      <br>
+      <button [disabled]="form.invalid" type="button" class="btn btn-primary" (click)="confirmChangeName()" > 确认 </button>
+      <button type="button" class="btn btn-default" (click)="decline()" > 取消 </button>
+    </form>
+  </div>
+
+</ng-template>
+
+<!-- 删除图片的模态框 -->
+<ng-template #deleteFig>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">删除图片</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <button type="button" class="btn btn-primary" (click)="deletePicture()" > 确认 </button>
+    <button type="button" class="btn btn-default" (click)="decline()" > 取消 </button>
+  </div>
+</ng-template>
+
+<!-- 最后的返回信息 包括修改图片名称是否成功，删除图片是否成功 -->
+<ng-template #check>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">返回信息</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body text-center">
+    <p *ngIf="changeFigNamemessage&&deleteOrchange==2">修改图片成功</p>
+    <p *ngIf="!changeFigNamemessage&&deleteOrchange==2">修改图片失败</p>
+    <p *ngIf="deleteFigmessage&&deleteOrchange==1">删除图片成功</p>
+    <p *ngIf="!deleteFigmessage&&deleteOrchange==1">删除图片失败</p>
+
+    <button type="button" class="btn btn-primary" (click)="decline()" > 确定 </button>
+  </div>
+
+</ng-template>
+<!-- <div *ngIf="judge">
+  <form [formGroup]="form" class="ui form" (ngSubmit)="changePicture(file)">
+        <label for="change">改变图片名称</label>
+    <input type="text" id="change" name="newfigpath" />
+  </form>
+</div> -->
+
+
 <!-- <ul class="nav nav-tabs fixed-top bg-light" id="myTab" role="tablist">
   <li class="nav-item">
     <a class="nav-link active" id="log-tab" data-toggle="tab" href="#log" role="tab" aria-controls="log" aria-selected="true">Log</a>

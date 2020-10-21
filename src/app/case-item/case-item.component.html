@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-2">
-      <p>{{ case.id }}</p>
+    <p>{{ case.id }}</p>
   </div>
   <div class="col-md-2">
     <p>{{ case.repoName }}</p>
@@ -8,15 +8,15 @@
   <div class="col-md-2">
     <p>{{ case.jobNumber }}</p>
   </div>
-    <!-- p>{{ case.description }}</p -->
-    <!-- p>{{ case.includeException }}</p -->
-    <!-- p>{{ case.includeAssertion }}</p -->
-    <!-- p>{{ case.num }}</p -->
+  <!-- p>{{ case.description }}</p -->
+  <!-- p>{{ case.includeException }}</p -->
+  <!-- p>{{ case.includeAssertion }}</p -->
+  <!-- p>{{ case.num }}</p -->
   <div class="col-md-2">
     <a [routerLink]="['/testCases', case.id]">show</a>
   </div>
-  <div class="col-md-2">
-    <a [routerLink]="['/testCases', case.id, 'edit']">edit</a>
-  </div>
-  
+<!--  <div class="col-md-2">-->
+<!--    <a [routerLink]="['/testCases', case.id, 'edit']">edit</a>-->
+<!--  </div>-->
 </div>
+

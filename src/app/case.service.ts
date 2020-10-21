@@ -1,16 +1,17 @@
 import { Injectable, Inject } from '@angular/core';
-
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Case } from './case.model';
 import { Observable } from 'rxjs';
-import * as $ from 'jquery';
-
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 @Injectable()
 export class CaseService {
 
   constructor(private http: HttpClient,
               @Inject('REST_URL') private RestUrl: string, // rest处理
-              @Inject('MY_URL') private MyUrl: string) {// 自己处理
+              @Inject('MY_URL') private MyUrl: string,
+              private location: Location,
+              private router: Router) {// 自己处理
   }
 
   index(): Case[] {
@@ -71,11 +72,10 @@ export class CaseService {
         headers:
           new HttpHeaders().set('Access-Control-Allow-Origin', '*')
       }).subscribe();
-
   }
 
   /*
-  * 编辑案例
+  *
   * @param:id
   * @return:
   * */
@@ -141,13 +141,8 @@ export class CaseService {
   * @return:
   * */
   // @ts-ignore
-  deleteFigure(id: number, filepath: string): void {
+  deleteFigure(id: number, filepath: string): Observable {
     console.log('到deletefigure 这里了！', filepath);
-    this.http.delete(`${this.MyUrl}?id=${id}&filepath=${filepath}`).subscribe(
-      data => {
-        console.log(data);
-      });
+    return this.http.delete(`${this.MyUrl}?id=${id}&filepath=${filepath}`);
   }
-
-
 }

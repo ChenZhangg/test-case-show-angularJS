@@ -15,10 +15,12 @@ var http_1 = require("@angular/common/http");
 var case_model_1 = require("./case.model");
 var CaseService = /** @class */ (function () {
     function CaseService(http, RestUrl, // rest处理
-    MyUrl) {
+    MyUrl, location, router) {
         this.http = http;
         this.RestUrl = RestUrl;
         this.MyUrl = MyUrl;
+        this.location = location;
+        this.router = router;
     }
     CaseService.prototype.index = function () {
         var cases = new Array();
@@ -74,7 +76,7 @@ var CaseService = /** @class */ (function () {
         }).subscribe();
     };
     /*
-    * 编辑案例
+    *
     * @param:id
     * @return:
     * */
@@ -131,9 +133,7 @@ var CaseService = /** @class */ (function () {
     // @ts-ignore
     CaseService.prototype.deleteFigure = function (id, filepath) {
         console.log('到deletefigure 这里了！', filepath);
-        this.http["delete"](this.MyUrl + "?id=" + id + "&filepath=" + filepath).subscribe(function (data) {
-            console.log(data);
-        });
+        return this.http["delete"](this.MyUrl + "?id=" + id + "&filepath=" + filepath);
     };
     CaseService = __decorate([
         core_1.Injectable(),

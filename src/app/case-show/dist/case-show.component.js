@@ -10,17 +10,33 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 exports.__esModule = true;
 exports.CaseShowComponent = void 0;
+var forms_1 = require("@angular/forms");
 var core_1 = require("@angular/core");
 var case_model_1 = require("../case.model");
+var http_1 = require("@angular/common/http");
 var CaseShowComponent = /** @class */ (function () {
-    function CaseShowComponent(route, service, http, MyUrl) {
+    function CaseShowComponent(route, service, http, MyUrl, modalService, fb, router) {
         var _this = this;
         this.route = route;
         this.service = service;
         this.http = http;
         this.MyUrl = MyUrl;
+        this.modalService = modalService;
+        this.fb = fb;
+        this.router = router;
         this.figPath = [];
+        this.changeFigNamemessage = false;
+        this.deleteFigmessage = false;
         route.params.subscribe(function (params) { _this.id = params['id']; });
+        /**
+         * newfigpath 是重新输入图片路径的文本框 需要验证 不为空&字符串格式两项格式
+         */
+        this.form = new forms_1.FormGroup({
+            newfigpath: new forms_1.FormControl('', [
+                forms_1.Validators.required,
+                forms_1.Validators.pattern('^[\-0-9a-zA-Z]+_[\-0-9a-zA-Z]+_([1-9][0-9]*)+(\.[0-9]{1,2})?_[a-zA-Z]+$'),
+            ])
+        });
     }
     CaseShowComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -50,15 +66,18 @@ var CaseShowComponent = /** @class */ (function () {
                 clusterNum: data['clusterNum']
             });
             for (var i in data['figs']) {
-                _this.figPath.push(_this.MyUrl + "/figs/" + data['figs'][i]);
+                // 如果图片是空的，那就不要加到显示里面去。
+                if (data['figs'][i] != '') {
+                    _this.figPath.push(_this.MyUrl + "/figs/" + data['figs'][i]);
+                }
             }
         });
     };
-    /*
-    * 图片数组进行排序
-    * @param: 文件路径 是个string数组
-    * @return: void
-    * */
+    /**
+     * 图片数组进行排序
+     * @param: 文件路径 是个string数组
+     * @return: void
+     */
     CaseShowComponent.prototype.Sort = function (figpath) {
         var length = figpath.length;
         var temp = new Map();
@@ -103,14 +122,81 @@ var CaseShowComponent = /** @class */ (function () {
             });
         }
     };
-    /*
-    * 删除图片
-    * @param:当前图片的路径
-    * @retrun:
-    * */
-    CaseShowComponent.prototype.deletePicture = function (filename) {
-        this.service.deleteFigure(this["case"].id, filename);
+    /**
+     * 删除图片
+     * @param filename
+     * @return void
+     */
+    CaseShowComponent.prototype.deletePicture = function () {
+        var _this = this;
+        this.service.deleteFigure(this["case"].id, this.tempfigpath).subscribe(function (judge) {
+            if (judge) {
+                _this.deleteOrchange = 1;
+            }
+            _this.deleteFigmessage = true;
+            _this.openCheck();
+        });
     };
+    /**
+     * 打开修改名称窗口
+     * @param: template
+     * @param 输入图片路径 string
+     * @return :void
+     */
+    CaseShowComponent.prototype.openChangeNameModal = function (template, figpath) {
+        this.modalRef = this.modalService.show(template);
+        this.tempfigpath = figpath; // 旧的figpath
+        console.log('figpath', figpath);
+    };
+    CaseShowComponent.prototype.openDeleteModal = function (template, figpath) {
+        this.tempfigpath = figpath;
+        this.modalRef = this.modalService.show(template);
+    };
+    /**
+     * 打开删除图片确认信息窗口
+     */
+    CaseShowComponent.prototype.openCheck = function () {
+        this.modalRef = this.modalService.show(this.check);
+    };
+    /**
+     * 输入图片名界面确认
+     * 现在才发送请求去修改名称
+     */
+    CaseShowComponent.prototype.confirmChangeName = function () {
+        var _this = this;
+        this.modalRef.hide();
+        console.log(this.form.controls.newfigpath.value);
+        var data = new FormData();
+        data.append('figpath', this.tempfigpath);
+        data.append('newfigname', this.form.controls.newfigpath.value);
+        this.http.patch(this.MyUrl + "/changeName/" + this.id, data, {
+            headers: new http_1.HttpHeaders().set('Access-Control-Allow-Origin', '*')
+        }).subscribe(function (check) {
+            if (check) {
+                _this.changeFigNamemessage = true;
+            }
+            // 调出框来
+            _this.deleteOrchange = 2;
+            _this.openCheck();
+        });
+    };
+    /**
+     * 界面取消等操作
+     */
+    CaseShowComponent.prototype.decline = function () {
+        this.modalRef.hide();
+        // 如果成功就刷新当前页面。
+        if (this.changeFigNamemessage || this.deleteFigmessage) {
+            window.location.reload();
+            // this.destination.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
+        }
+    };
+    __decorate([
+        core_1.ViewChild('deleteFig')
+    ], CaseShowComponent.prototype, "deleteModal");
+    __decorate([
+        core_1.ViewChild('check')
+    ], CaseShowComponent.prototype, "check");
     CaseShowComponent = __decorate([
         core_1.Component({
             selector: 'app-case-show',
