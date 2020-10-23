@@ -80,6 +80,7 @@ var CaseShowComponent = /** @class */ (function () {
      */
     CaseShowComponent.prototype.Sort = function (figpath) {
         var length = figpath.length;
+        console.log(this.figPath);
         var temp = new Map();
         for (var i = 0; i < length; i++) {
             var str = figpath[i];

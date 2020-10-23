@@ -46,7 +46,6 @@ import { AlertModule } from 'ngx-bootstrap/alert';
     { provide: 'REST_URL', useValue: 'http://10.176.34.86:8090/api/testCases'},
     // 开发环境 rest处理请求
     // { provide: 'REST_URL', useValue: 'http://localhost:8090/api/testCases'},
-
     // 生产环境 处理请求
     { provide: 'MY_URL', useValue: 'http://10.176.34.86:8090/testCases'},
     // 开发环境 处理请求

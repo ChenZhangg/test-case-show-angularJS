@@ -155,12 +155,13 @@ export class CaseShowComponent implements OnInit, OnChanges {
     this.service.deleteFigure(this.case.id, this.tempfigpath).subscribe(
       judge => {
         if (judge) {
-          this.deleteOrchange = 1;
+          this.deleteFigmessage = true;
         }
-        this.deleteFigmessage = true;
+        this.deleteOrchange = 1;
         this.openCheck();
       }
     );
+    this.modalRef.hide();
   }
 
   /**
