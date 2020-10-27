@@ -24,6 +24,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
   }
   ngOnChanges(changes: import('@angular/core').SimpleChanges): void {
     if (this.case) {
+      this.form.controls.id.setValue(this.case.id);
       this.form.controls.repoName.setValue(this.case.repoName);
       this.form.controls.jobNumber.setValue(this.case.jobNumber);
       this.form.controls.description.setValue(this.case.description);
@@ -55,6 +56,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.form = this.fb.group({
+      id: [''],
       repoName: ['', repoNameValidator],
       jobNumber: ['', jobNumberValidator],
       description: [''],

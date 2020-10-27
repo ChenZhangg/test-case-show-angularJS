@@ -21,8 +21,9 @@
     </button>
   </div>
   <div class="modal-body text-center">
-    <p>将图片名称修改为：</p>
-    <form [formGroup]="form"  >
+    <p>原图片名：{{this.processfigpath}}</p>
+    <p><strong>将图片名称修改为:</strong>无需后缀</p>
+    <form [formGroup]="form">
       <input type="text" formControlName="newfigpath" id="newfigpath" class="form-control" required autocomplete="off">
       <br>
       <div *ngIf="form.controls.newfigpath.touched">

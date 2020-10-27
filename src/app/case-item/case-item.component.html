@@ -2,7 +2,7 @@
   <div class="col-md-2">
     <p>{{ case.id }}</p>
   </div>
-  <div class="col-md-2">
+  <div class="col-md-4">
     <p>{{ case.repoName }}</p>
   </div>
   <div class="col-md-2">
@@ -13,7 +13,7 @@
   <!-- p>{{ case.includeAssertion }}</p -->
   <!-- p>{{ case.num }}</p -->
   <div class="col-md-2">
-    <a [routerLink]="['/testCases', case.id]">show</a>
+    <a [routerLink]="['/testCases', case.id]" target="_blank">show</a>
   </div>
 <!--  <div class="col-md-2">-->
 <!--    <a [routerLink]="['/testCases', case.id, 'edit']">edit</a>-->

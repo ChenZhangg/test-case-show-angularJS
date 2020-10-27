@@ -1,12 +1,19 @@
-<pre>{{ case | json}}</pre>
+<!--<pre>{{ case | json}}</pre>-->
+
+
+
 <!-- div *ngIf="!form.valid" class="alert alert-danger">存在数据格式不对</div -->
 <form [formGroup]="form" class="color-form" (ngSubmit)="onSubmit()">
   <div class="form-row">
-    <div class="form-group col-6">
+    <div class="form-group col-md-2">
+      <label for="repoName">ID</label>
+      <input type="text" id="id" readonly="readonly" formControlName="id" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
       <label for="repoName">Repo Name</label>
       <input type="text" id="repoName" placeholder="" formControlName="repoName" class="form-control" [class.bg-warning]="form.controls['repoName'].hasError('invalidRepoName')">
     </div>
-    <div class="form-group col-6">
+    <div class="form-group col-md-4">
       <label for="jobNumber">Job Number</label>
       <input type="text" id="jobNumber" placeholder="" formControlName="jobNumber" class="form-control" [class.bg-warning]="form.controls['jobNumber'].hasError('invalidJobNumber')">
     </div>
@@ -27,12 +34,12 @@
       <label for="includeAssertion">包含断言错误</label>
     </div>
   </div>
+
   <div class="form-row">
     <label for="causeUrl">Cause URL</label>
     <input type="text" id="causeUrl" formControlName="causeUrl" class="form-control">
-  </div>
-
-  <div class="form-row">
+<!--  </div>-->
+<!--  <div class="form-row">-->
     <div class="form-group col-md-6">
       <label for="preCommit">Pre Commit SHA</label>
       <input type="text" id="preCommit" placeholder="" formControlName="preCommit" class="form-control" [class.bg-warning]="form.controls['preCommit'].hasError('invalidSha')">

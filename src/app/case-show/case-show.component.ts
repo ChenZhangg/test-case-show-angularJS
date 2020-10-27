@@ -22,12 +22,12 @@ export class CaseShowComponent implements OnInit, OnChanges {
   case: Case;
   figPath: string[] = [];
   tempfigpath: string; // 修改图片名称和删除图片的时候用到
-  form: FormGroup;
   newfigpath: string;
+  processfigpath: string; // 需要用正则表达式处理的图片路径显示旧的图片名称
+  form: FormGroup;
   modalRef: BsModalRef;
   changeFigNamemessage: boolean; // 表示修改图片名称成功与否 true 表示成功。
   deleteFigmessage: boolean ;
-
   deleteOrchange: number; // 表示是按了删除还是修改按钮  其中 0表示删除，1表示修改
   @ViewChild('deleteFig')
   deleteModal: TemplateRef<any>;
@@ -173,8 +173,20 @@ export class CaseShowComponent implements OnInit, OnChanges {
   openChangeNameModal(template: TemplateRef<any>, figpath: string) {
     this.modalRef = this.modalService.show(template);
 
+    this.processfigpath = this.changePathtoName(figpath);
     this.tempfigpath = figpath; // 旧的figpath
-    console.log('figpath', figpath);
+  }
+
+  /**
+   * 处理图片路径 变成图片名称
+   * @param template
+   * @param figpath
+   */
+  changePathtoName(figpath: string): string {
+    let temp = figpath.match('figs/[a-zA-Z0-9\\-._]+');
+
+    let str = temp[0].replace('figs/', '');
+    return str;
   }
 
   openDeleteModal(template: TemplateRef<any>, figpath: string) {
