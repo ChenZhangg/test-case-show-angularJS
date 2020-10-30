@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import {Component, OnInit, Input, OnChanges, Output, EventEmitter} from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators, FormControl } from '@angular/forms';
 import { CaseService } from '../case.service';
 import { Case } from '../case.model';
@@ -15,8 +15,23 @@ export class CaseFormComponent implements OnInit, OnChanges {
   @Input() case: Case;
   @Input() newOrEdit: boolean;
   @Input() id: number;
+
   form: FormGroup;
-  files: File[]  =  [];
+
+  // 图片名后缀 RepoName JobId
+  @Input() postfix: string;
+  @Output() postfixChange = new EventEmitter();
+  RepoName: string;
+  JobId: string;
+  // 图片后缀下拉框
+  lists = ['', 'testsinerror',
+           'stack', 'failedstack',
+           'cause', 'failedcause',
+           'fix', 'failedfix',
+           'testcases', 'other'];
+  currentFileName: string; // 用来显示 当前文件名
+
+  files: File[] = [];
   editFormData: FormData = new FormData();
   constructor(private fb: FormBuilder,
               private service: CaseService,
@@ -162,12 +177,45 @@ export class CaseFormComponent implements OnInit, OnChanges {
   }
 
   onFileChanged(event) {
-    console.log(event.target.files);
-    for (let i =  0; i <  event.target.files.length; i++)  {
-      console.log(event.target.files[i]);
-      this.files.push(event.target.files[i]);
+    // console.log(event.target.files);
+    for (let i =  0; i <  event.target.files.length; i++) {
+      if (this.currentFileName != '' && this.currentFileName != null) {
+        let tmp = new File([event.target.files[i]], this.currentFileName);
+        this.files.push(tmp);
+      } else {
+        this.files.push(event.target.files[i]);
+      }
+      // let figname = this.currentFileName == '' ?  event.target.files[i].name : this.currentFileName;
+      // this.files.push(event.target.files[i]);
     }
   }
+
+  /**
+   * 获得下拉框的内容
+   * @param post
+   */
+  getPostfix(post: string) {
+
+    const f = this.form.value;
+    this.RepoName = f.repoName;
+    this.JobId = f.jobNumber;
+    let tmp = '';
+    if ((this.RepoName != '') && (this.JobId != '')) { // 如果有输入的话
+      tmp = this.RepoName + '_' + this.JobId;
+    } else {
+      tmp = 'tmp';
+    }
+
+    tmp = tmp.replace('/', '_');
+    tmp = tmp + '_' + post;
+
+    this.currentFileName = tmp + '.png';
+    console.log('ccccc:' + this.currentFileName);
+    // this.RepoName = tmp;
+    // console.log('rrrreponame+'+ this.RepoName);
+    // this.currentFileName = this.RepoName+ this.JobId+
+  }
+
 }
 
 function repoNameValidator(control: FormControl): {[s: string]: boolean} {

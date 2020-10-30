@@ -1,7 +1,5 @@
 <!--<pre>{{ case | json}}</pre>-->
 
-
-
 <!-- div *ngIf="!form.valid" class="alert alert-danger">存在数据格式不对</div -->
 <form [formGroup]="form" class="color-form" (ngSubmit)="onSubmit()">
   <div class="form-row">
@@ -94,7 +92,15 @@
 
   <div class="form-row">
     <label for="figs">添加截图</label>
-    <input id="figs" multiple  type="file" class="form-control" formControlName="figs" (change)="onFileChanged($event)">
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <select (change)="getPostfix($event.target.value)" id="postfix" name="postfix" required>
+      <option *ngFor="let item of lists" [value]="item">{{item}}</option>
+    </select>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <p>下一张图片名为{{currentFileName}}</p>
+    <br>
+    <input id="figs" multiple type="file" class="form-control" formControlName="figs" (change)="onFileChanged($event)">
+
   </div>
 
   <div class="form-row" *ngFor="let file of files; let i=index">
@@ -102,7 +108,7 @@
   </div>
   <br>
   <div class="form-group">
-    <button type="submit" class="btn btn-link bg-white text-info shadow px-5">Submit</button>
+    <button [disabled]="form.invalid" type="submit" class="btn btn-link bg-white text-info shadow px-5">Submit</button>
   </div>
 
 </form>

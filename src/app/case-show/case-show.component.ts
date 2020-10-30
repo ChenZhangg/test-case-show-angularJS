@@ -87,10 +87,9 @@ export class CaseShowComponent implements OnInit, OnChanges {
           multipleError: data['multipleError'],
           clusterNum: data['clusterNum']
         });
-
         for (let i in data['figs']) {
           // 如果图片是空的，那就不要加到显示里面去。
-          if(data['figs'][i]!=''){
+          if (data['figs'][i] != '') {
             this.figPath.push(`${this.MyUrl}/figs/${data['figs'][i]}`);
           }
         }
@@ -174,6 +173,8 @@ export class CaseShowComponent implements OnInit, OnChanges {
     this.modalRef = this.modalService.show(template);
 
     this.processfigpath = this.changePathtoName(figpath);
+    this.form.controls.newfigpath.setValue(this.processfigpath);
+
     this.tempfigpath = figpath; // 旧的figpath
   }
 
@@ -184,7 +185,6 @@ export class CaseShowComponent implements OnInit, OnChanges {
    */
   changePathtoName(figpath: string): string {
     let temp = figpath.match('figs/[a-zA-Z0-9\\-._]+');
-
     let str = temp[0].replace('figs/', '');
     return str;
   }
@@ -229,7 +229,6 @@ export class CaseShowComponent implements OnInit, OnChanges {
         this.openCheck();
       }
     );
-
   }
 
   /**
