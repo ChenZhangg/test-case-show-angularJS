@@ -17,22 +17,15 @@ export class CaseFormComponent implements OnInit, OnChanges {
   @Input() id: number;
 
   form: FormGroup;
-
-  // 图片名后缀 RepoName JobId
-  @Input() postfix: string;
-  @Output() postfixChange = new EventEmitter();
-  RepoName: string;
-  JobId: string;
   // 图片后缀下拉框
-  lists = ['', 'testsinerror',
-           'stack', 'failedstack',
-           'cause', 'failedcause',
-           'fix', 'failedfix',
-           'testcases', 'other'];
-  currentFileName: string; // 用来显示 当前文件名
-
+  lists = ['log',
+           'stacktrace',
+           'cause',
+           'fix',
+           'code'];
+  suffix: string;
   files: File[] = [];
-  editFormData: FormData = new FormData();
+  saveFigNames: string[] = [];
   constructor(private fb: FormBuilder,
               private service: CaseService,
               private router: Router) {
@@ -43,29 +36,31 @@ export class CaseFormComponent implements OnInit, OnChanges {
       this.form.controls.repoName.setValue(this.case.repoName);
       this.form.controls.jobNumber.setValue(this.case.jobNumber);
       this.form.controls.description.setValue(this.case.description);
-      if (this.case.includeException == true) {
+      if (this.case.includeException === true) {
         this.form.controls.includeException.setValue(this.case.includeException);
       }
-      if (this.case.includeAssertion == true) {
+      if (this.case.includeAssertion === true) {
         this.form.controls.includeAssertion.setValue(this.case.includeAssertion);
       }
       this.form.controls.causeUrl.setValue(this.case.causeUrl);
       this.form.controls.preCommit.setValue(this.case.preCommit);
       this.form.controls.currentCommit.setValue(this.case.currentCommit);
-      if (this.case.multipleCrash == true) {
+      if (this.case.multipleCrash === true) {
         this.form.controls.multipleCrash.setValue(this.case.multipleCrash);
       }
       this.form.controls.crashClusterNum.setValue(this.case.crashClusterNum);
 
-      if (this.case.multipleAssertion == true) {
+      if (this.case.multipleAssertion === true) {
         this.form.controls.multipleAssertion.setValue(this.case.multipleAssertion);
       }
       this.form.controls.assertionClusterNum.setValue(this.case.assertionClusterNum);
 
-      if (this.case.multipleError == true) {
+      if (this.case.multipleError === true) {
         this.form.controls.multipleError.setValue(this.case.multipleError);
       }
       this.form.controls.clusterNum.setValue(this.case.clusterNum);
+      this.saveFigNames = this.case.figs;
+      console.log('已经保存的图片名' + this.saveFigNames);
     }
   }
 
@@ -90,11 +85,13 @@ export class CaseFormComponent implements OnInit, OnChanges {
       preCommit: ['', shaValidator],
       currentCommit: ['', shaValidator],
       fixUrls: this.fb.array([this.fb.control('')]),
-      figs: ['']
+      figs: [],
+
+      suffix: [null] // 下拉列表框
     });
 
     for (const ctrl in this.form.controls) {
-      if (ctrl == 'causeUrl') {
+      if (ctrl === 'causeUrl') {
         this.form.get(ctrl).valueChanges.subscribe(
           (value: string) => {
             const pattern: RegExp = /compare\/(\S+)\.\.\.(\S*)/;
@@ -107,7 +104,7 @@ export class CaseFormComponent implements OnInit, OnChanges {
       } else {
         this.form.get(ctrl).valueChanges.subscribe(
           (value: string) => {
-            // console.log("====" + ctrl.constructor.name + ctrl);
+            // console.log("====" + ctrl.constructor.name + ctrl); xnZBM
             // console.log(value);
 
           });
@@ -119,8 +116,8 @@ export class CaseFormComponent implements OnInit, OnChanges {
     console.log('you submitted value:', this.form.value);
 
     const formData =  new FormData();
-    for (let i = 0; i <  this.files.length; i++)  {
-        formData.append('files',  this.files[i]);
+    for (const file of  this.files)  {
+        formData.append('files',  file);
     }
     const f = this.form.value;
     formData.append('repoName', f.repoName);
@@ -176,44 +173,52 @@ export class CaseFormComponent implements OnInit, OnChanges {
     return false;
   }
 
-  onFileChanged(event) {
-    // console.log(event.target.files);
-    for (let i =  0; i <  event.target.files.length; i++) {
-      if (this.currentFileName != '' && this.currentFileName != null) {
-        let tmp = new File([event.target.files[i]], this.currentFileName);
-        this.files.push(tmp);
-      } else {
-        this.files.push(event.target.files[i]);
+  getMaxIndex(): number {
+    const f = this.form.value;
+    const suffix: string = f.suffix;
+    let index = -1;
+    for (const savedFigName of this.saveFigNames) {
+      const regex: RegExp = new RegExp(suffix + '_' + '(\\d+)');
+      const match = regex.exec(savedFigName);
+      console.log('Match-> ' + match);
+      if (match !== null) {
+        index = parseInt(match[1], 10);
       }
-      // let figname = this.currentFileName == '' ?  event.target.files[i].name : this.currentFileName;
-      // this.files.push(event.target.files[i]);
+    }
+    console.log('Max Index: ' + index);
+    return index;
+  }
+
+  onFileChanged(event) {
+    const f = this.form.value;
+    console.log(f);
+
+    if (f.suffix === null) {
+      window.alert('请选择suffix');
+      f.figs = [];
+      return;
+    }
+    for (const tmpFile of event.target.files) {
+      const index: number = this.getMaxIndex() + 1;
+      let fileName: string = f.repoName + '_' + f.jobNumber + '_' + f.suffix + '_' + index + '.png';
+      fileName = fileName.replace('/', '@');
+      console.log(tmpFile.name, ' 图片名称变为-> ', fileName);
+      const file: File = new File([tmpFile], fileName);
+      this.files.push(file);
+      this.saveFigNames.push(fileName);
     }
   }
 
   /**
-   * 获得下拉框的内容
-   * @param post
+   * 根据下拉框的内容，设置图片后缀名
    */
-  getPostfix(post: string) {
-
+  setFigType(suffix: string) {
     const f = this.form.value;
-    this.RepoName = f.repoName;
-    this.JobId = f.jobNumber;
-    let tmp = '';
-    if ((this.RepoName != '') && (this.JobId != '')) { // 如果有输入的话
-      tmp = this.RepoName + '_' + this.JobId;
-    } else {
-      tmp = 'tmp';
+    console.log(f);
+    if (f.repoName === '' || f.jobNumber === '') {
+      window.alert('请添加Repo Name和Job Number');
     }
-
-    tmp = tmp.replace('/', '_');
-    tmp = tmp + '_' + post;
-
-    this.currentFileName = tmp + '.png';
-    console.log('ccccc:' + this.currentFileName);
-    // this.RepoName = tmp;
-    // console.log('rrrreponame+'+ this.RepoName);
-    // this.currentFileName = this.RepoName+ this.JobId+
+    this.suffix = suffix;
   }
 
 }

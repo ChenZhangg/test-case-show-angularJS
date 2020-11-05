@@ -93,11 +93,12 @@
   <div class="form-row">
     <label for="figs">添加截图</label>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <select (change)="getPostfix($event.target.value)" id="postfix" name="postfix" required>
-      <option *ngFor="let item of lists" [value]="item">{{item}}</option>
+    <select (change)="setFigType($event.target.value)" id="postfix" formControlName="suffix" name="postfix" >
+      <option [ngValue]="null" disabled>Choose Suffix</option>
+      <option *ngFor="let item of lists" [ngValue]="item"> {{ item }} </option>
     </select>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <p>下一张图片名为{{currentFileName}}</p>
+    <p>下一张图片名为{{ currentFileName }}</p>
     <br>
     <input id="figs" multiple type="file" class="form-control" formControlName="figs" (change)="onFileChanged($event)">
 
